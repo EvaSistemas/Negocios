@@ -16,23 +16,22 @@ $(document).on("pageinit","#Principal", function(e, data){
  var mapa;
  var miOptions;
  var defaultPos;
+ var opciones;
  var marca;
  var infoVentanta;
+ defaultPos=new  google.maps.LatLng(19.463948, -97.686259);
+ opciones={maximumAge:500000,enableHighAccuracy:true,timeout:5000};
  
    document.addEventListener("deviceready", onDeviceReady, false);
-  
     function onDeviceReady(){
-
-	$("#btnConsServ").tap(function (){//Evento de botón para consultar los servicios de la base de datos
-	 defaultPos=new  google.maps.LatLng(19.463948, -97.686259);
+	$("#btnConsServ").tap(function (){//Evento de botón para consultar los servicios de la base de datos	 
 	    miOptions={
-	      zoom:16,
+	      zoom:8,
 	      center:defaultPos,
 	      disableDefaultUI:true,
 	      mapTypeId:google.maps.MapTypeId.ROADMAP};
 		  
 	  map= new google.maps.Map(document.getElementById("map-canvas"),miOptions);
-	  obtenerUbicacion();
 	  obtenerMarcas();
 	});
 	
@@ -232,7 +231,8 @@ $(document).on("pageinit","#Principal", function(e, data){
           //alert("listo");   	
     }
     
- function uploadPhoto(foto) {  
+     
+      function uploadPhoto(foto) {  
 	//alert("si entro: "+foto);
 	var options = new FileUploadOptions();
 	options.fileKey="file";
@@ -251,7 +251,6 @@ $(document).on("pageinit","#Principal", function(e, data){
 		navigator.notification.alert("Error: "+err.code+" detalle: "+err.response,null, "Error de Envío");
 	}, options);
 }
-
     
     function obtenerUbicacion(){//Funcion que obtiene la Ubicación del dispositivo móvil
     if(navigator.geolocation){	
@@ -326,7 +325,9 @@ $(document).on("pageinit","#Principal", function(e, data){
     function dibujarMarcas(nombre, dir, gir , lat, lng, ruta){//habilitar esta función
  
          var latlng=new google.maps.LatLng(lat,lng);
-  	 	  
+  	 alert("si llego: Lat:"+lat+" Long:"+lng+" ruta: "+ruta );
+          var latlng=new google.maps.LatLng(lat,lng);
+          
 	  var marca2=new google.maps.Marker({
 	      position:latlng,
 	      map:map,
@@ -337,12 +338,11 @@ $(document).on("pageinit","#Principal", function(e, data){
 	  var infoVentanta2=new google.maps.InfoWindow({
 	    position:latlng,
 	    //content:"<p>Tu posicion actual es: </p>"+latlng
-	   content:'<div style="width:200px; height:160px;"><div style="text-align: center; color:#5c041b; font-weight:bolder; font-size:12px; font-family:arial;">' + nombre + '</div><img src="'+ruta+'" width="100" heigth="60" /><div style="text-align:center; color: #2e20b8; font-size:12px; font-family:arial; width:200px; text-align:center;">Dirección:' + dir + '</div><div>Giro: ' + gir + '</div>'
+	   content:'<div style="width:200px; height:160px;"><div style="text-align: center; color:#5c041b; font-weight:bolder; font-size:12px; font-family:arial;">' + nombre + '</div><img src="http://sistemas7.260mb.net/'+ruta+'" width="90" heigth="60" /><div style="text-align:center; color: #2e20b8; font-size:12px; font-family:arial; width:200px; text-align:center;">Dirección:' + dir + '</div><div>Giro: ' + gir + '</div>'
 	  });
-	  google.maps.event.addListener(marca2, "click", function(){infoVentanta2.open(map,this);});
+	google.maps.event.addListener(marca2, "click", function(){infoVentanta2.open(map,marca2);});
     } 
-  
-  
+                  
   function dibujarTabla(respuesta, respDatos){
     if(respDatos!=0){
   respuesta.html("");
